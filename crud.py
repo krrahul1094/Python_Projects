@@ -85,6 +85,32 @@ def update():
     conn.close()
     return jsonify(emp1)
 
+#sort
+@crud.route('/sortname', methods=['GET'])
+def sortname():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM emp order by name asc")
+    emp = cursor.fetchall()
+    conn.close()
+
+    return jsonify(emp)
+
+
+#pagination
+@crud.route('/page', methods=['GET'])
+def get_records():
+    page = int(request.args.get('page'))
+    lim = 5
+    off = (page - 1) * lim
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM emp limit %s offset %s", (lim, off,))
+    emp = cursor.fetchall()
+    conn.close()
+
+    return jsonify(emp)
+
 
 
 
